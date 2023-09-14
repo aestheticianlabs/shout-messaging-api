@@ -2,9 +2,11 @@
   "name": "shout-messaging-api",
   "version": "0.0.1",
   "main": "index.js",
+  "type": "module",
   "private": true,
   "scripts": {},
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
   }
 }
