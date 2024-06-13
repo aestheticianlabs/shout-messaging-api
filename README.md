@@ -7,6 +7,7 @@
 To start the service on the default port (3000): `npm start`
 
 To use a specific port: `PORT=[value] npm start`
+To modify the service root path (default is /): `ROOTPATH=[value] npm start`
 
 ### Run with Docker
 

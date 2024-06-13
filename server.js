@@ -16,13 +16,16 @@ const server = app.listen(port, () => {
 });
 
 // init socket.io
+const rootPath = process.env.ROOTPATH || null;
+console.log(`Root path is ${rootPath}`);
 const io = new Server(server, {
 	cors: {
 		origin: "*" // todo: this is a bit of a security issue but we don't have to worry about it for now
-	}
+	},
+	path: rootPath
 });
 
-app.get('/', (req, resp) => {
+app.get(rootPath || '/', (req, resp) => {
 	resp.send('shout-messaging-api');
 });
 
@@ -60,9 +63,15 @@ io.on('connection', (socket) => {
 	}
 
 	// handle messages from client
-	socket.on('message', (message) => {
-		// broadcast message to everyone in the room
-		socket.to(room.id).emit('message', message);
+	socket.on('message', (message, to, ...data) => {
+		if (to) {
+			console.log(`message ${message} to ${to}`, ...data)
+			room.getClient(to)?.socket.emit('message', message, ...data);
+		} else {
+			// broadcast message to everyone in the room
+			console.log(`message ${message} to room`, ...data)
+			socket.to(room.id).emit('message', message, ...data);
+		}
 	});
 
 	// handle disconnect
