@@ -70,6 +70,9 @@ io.on('connection', (socket) => {
 		console.log(`Client ${client.id} disconnected.`);
 		room.removeClient(client.id);
 
+		// tell the room the client left 
+		io.to(room.id).emit('client_left', client, room);
+
 		// room is empty, time to destroy
 		console.log(`Room client count: ${room.clientCount}`)
 		if (room.clientCount === 0) {
